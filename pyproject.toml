@@ -1,0 +1,56 @@
+[tool.poetry]
+name = "dating-telegram-bot-webapp-2-0"
+version = "0.1.0"
+description = "Dating-Telegram-Bot-Webapp-2.0 Dating Telegram Bot WebApp allows users to meet through the Telegram bot, as well as use a convenient web interface to view profiles, send messages and manage interactions with other users."
+authors = ["AlexanderLukash <sashass20062727@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.12"
+fastapi = "^0.111.1"
+aiogram = "^3.10.0"
+
+
+[tool.poetry.group.dev.dependencies]
+pre-commit = "^3.7.1"
+pytest = "^8.3.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+
+[tool.isort]
+multi_line_output = 3
+include_trailing_comma = true
+line_length = 120
+lines_after_imports = 2
+lines_between_sections = 1
+lines_between_types = 0
+force_alphabetical_sort_within_sections = true
+ensure_newline_before_comments = true
+combine_as_imports = true
+combine_star = true
+skip_gitignore = true
+balanced_wrapping = true
+force_grid_wrap = 2
+src_paths = ["core", ]
+skip_glob = [
+    ".git",
+    ".idea",
+    ".vscode",
+    "venv",
+    ".venv",
+]
+known_fastapi = ["fastapi"]
+known_first_party = ["app"]
+sections = [
+    "FUTURE",
+    "STDLIB",
+    "FASTAPI",
+    "THIRDPARTY",
+    "FIRSTPARTY",
+    "LOCALFOLDER",
+]
