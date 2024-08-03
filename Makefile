@@ -1,4 +1,5 @@
 DC = docker compose -p dating-bot
+EXEC = docker exec -it
 LOGS = docker logs
 ENV = --env-file .env
 APP_FILE = docker_compose/app.yaml
@@ -12,3 +13,7 @@ app:
 .PHONY: app-logs
 app-logs:
 	${LOGS} -f ${APP_CONTAINER} -f
+
+.PHONY: test
+test:
+	${EXEC} ${APP_CONTAINER} pytest
