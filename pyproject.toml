@@ -18,6 +18,7 @@ betterlogging = "^1.0.0"
 [tool.poetry.group.dev.dependencies]
 pre-commit = "^3.7.1"
 pytest = "^8.3.2"
+pydantic-settings = "^2.4.0"
 
 [build-system]
 requires = ["poetry-core"]
