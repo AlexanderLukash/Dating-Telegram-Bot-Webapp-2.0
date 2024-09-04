@@ -201,6 +201,17 @@ tests-mypy = ["mypy (>=1.6)", "pytest-mypy-plugins"]
 tests-no-zope = ["attrs[tests-mypy]", "cloudpickle", "hypothesis", "pympler", "pytest (>=4.3.0)", "pytest-xdist[psutil]"]
 
 [[package]]
+name = "betterlogging"
+version = "1.0.0"
+description = "My logging improvement"
+optional = false
+python-versions = "*"
+files = [
+    {file = "betterlogging-1.0.0-py3-none-any.whl", hash = "sha256:b20f4d39af98faf540e9c3fe3d0a08872b3c5da0d02724e7c33be7358aae2a7b"},
+    {file = "betterlogging-1.0.0.tar.gz", hash = "sha256:324fab02af0a1a6ea05869ac8dd5b1bcfa59f6fa882cf75e24dfa99f412f54d3"},
+]
+
+[[package]]
 name = "certifi"
 version = "2024.7.4"
 description = "Python package for providing Mozilla's CA Bundle."
@@ -1614,4 +1625,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "c2f4203f63cc9fe46ebef7a5637bd0db49c74df6e774fe49a4ef90767af02779"
+content-hash = "71d537a92d273f957570bfe270c02eaf0e38c4d8d719d9bc5215f12a24014036"
