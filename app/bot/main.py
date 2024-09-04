@@ -5,7 +5,7 @@ from aiogram import (
 from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
 
-from app.bot.handlers.start import router
+from app.bot.handlers.setup import register_routers
 from app.settings.config import Config
 
 
@@ -16,6 +16,4 @@ bot = Bot(
     default=DefaultBotProperties(parse_mode=ParseMode.HTML),
 )
 dp = Dispatcher()
-dp.include_routers(
-    router,
-)
+register_routers(dp)
