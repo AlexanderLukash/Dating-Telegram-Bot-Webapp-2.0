@@ -13,11 +13,11 @@ from app.domain.values.users import (
 @dataclass
 class UserEntity(BaseEntity):
     telegram_id: int
-    username: str | None
     name: Name
-    gender: Gender
-    age: Age
-    city: City
-    looking_for: Gender
-    about: AboutText
-    is_active: bool
+    username: str | None = None
+    gender: Gender | None = None
+    age: Age | None = None
+    city: City | None = None
+    looking_for: Gender | None = None
+    about: AboutText | None = None
+    is_active: bool = False

@@ -13,6 +13,8 @@ fastapi = "^0.111.1"
 aiogram = "^3.10.0"
 environs = "^11.0.0"
 betterlogging = "^1.0.0"
+punq = "^0.7.0"
+motor = "^3.5.1"
 
 
 [tool.poetry.group.dev.dependencies]

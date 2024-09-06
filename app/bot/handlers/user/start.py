@@ -4,6 +4,12 @@ from aiogram.types import (
     Message,
     User,
 )
+from punq import Container
+
+from app.domain.entities.users import UserEntity
+from app.domain.values.users import Name
+from app.logic.init import init_container
+from app.logic.services.base import BaseUsersService
 
 
 user_router: Router = Router(
@@ -27,5 +33,17 @@ def welcome_message(user: User) -> str:
 
 
 @user_router.message(CommandStart())
-async def start(message: Message):
+async def start(message: Message, container: Container = init_container()):
+    service: BaseUsersService = container.resolve(BaseUsersService)
+    telegram_id = message.from_user.id
+    username = message.from_user.username or ""
+    name = Name(message.from_user.first_name)
+
+    user_entity = UserEntity(
+        telegram_id=telegram_id,
+        username=username,
+        name=name,
+    )
+
+    await service.create_user(user_entity)
     await message.answer(welcome_message(user=message.from_user))
