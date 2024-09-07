@@ -23,3 +23,10 @@ class BaseMongoDBRepository(ABC):
 class MongoDBUserRepository(BaseUsersRepository, BaseMongoDBRepository):
     async def create_user(self, user: UserEntity):
         await self._collection.insert_one(convert_user_entity_to_document(user))
+
+    async def check_user_exist_by_telegram_id(self, telegram_id: int) -> bool:
+        return bool(
+            await self._collection.find_one(
+                filter={"telegram_id": telegram_id},
+            ),
+        )

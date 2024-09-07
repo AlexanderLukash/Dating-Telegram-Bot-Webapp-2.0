@@ -1,4 +1,7 @@
 from dataclasses import dataclass
+from typing import Optional
+
+from aiogram.types import User
 
 from app.domain.entities.base import BaseEntity
 from app.domain.values.users import (
@@ -14,10 +17,18 @@ from app.domain.values.users import (
 class UserEntity(BaseEntity):
     telegram_id: int
     name: Name
-    username: str | None = None
-    gender: Gender | None = None
-    age: Age | None = None
-    city: City | None = None
-    looking_for: Gender | None = None
-    about: AboutText | None = None
+    username: Optional[str] = None
+    gender: Optional[Gender] = None
+    age: Optional[Age] = None
+    city: Optional[City] = None
+    looking_for: Optional[Gender] = None
+    about: Optional[AboutText] = None
     is_active: bool = False
+
+    @classmethod
+    def from_telegram_user(cls, user: User) -> "UserEntity":
+        return cls(
+            telegram_id=user.id,
+            username=user.username or "",
+            name=Name(user.first_name),
+        )

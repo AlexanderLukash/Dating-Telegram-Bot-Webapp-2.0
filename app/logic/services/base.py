@@ -4,8 +4,13 @@ from abc import (
 )
 from dataclasses import dataclass
 
+from app.domain.entities.users import UserEntity
+
 
 @dataclass
 class BaseUsersService(ABC):
     @abstractmethod
-    def create_user(self, user_data): ...
+    async def create_user(self, user: UserEntity) -> UserEntity: ...
+
+    @abstractmethod
+    async def check_user_exist(self, user_id: int): ...
