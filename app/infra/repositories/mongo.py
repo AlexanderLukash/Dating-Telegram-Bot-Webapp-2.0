@@ -1,11 +1,16 @@
 from abc import ABC
 from dataclasses import dataclass
+from typing import Iterable
 
 from motor.core import AgnosticClient
 
 from app.domain.entities.users import UserEntity
 from app.infra.repositories.base import BaseUsersRepository
-from app.infra.repositories.converters import convert_user_entity_to_document
+from app.infra.repositories.converters import (
+    convert_user_document_to_entity,
+    convert_user_entity_to_document,
+)
+from app.infra.repositories.filters.users import GetAllUsersFilters
 
 
 @dataclass
@@ -30,3 +35,17 @@ class MongoDBUserRepository(BaseUsersRepository, BaseMongoDBRepository):
                 filter={"telegram_id": telegram_id},
             ),
         )
+
+    async def get_all_user(
+        self,
+        filters: GetAllUsersFilters,
+    ) -> tuple[Iterable[UserEntity], int]:
+        cursor = self._collection.find().skip(filters.offset).limit(filters.limit)
+
+        count = await self._collection.count_documents({})
+        chats = [
+            convert_user_document_to_entity(user_document=user_document)
+            async for user_document in cursor
+        ]
+
+        return chats, count

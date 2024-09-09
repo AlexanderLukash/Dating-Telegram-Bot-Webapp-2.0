@@ -2,6 +2,7 @@ from dataclasses import dataclass
 
 from app.domain.entities.users import UserEntity
 from app.infra.repositories.base import BaseUsersRepository
+from app.infra.repositories.filters.users import GetAllUsersFilters
 from app.logic.exceptions.user import UserAlreadyExistsException
 from app.logic.services.base import BaseUsersService
 
@@ -20,3 +21,6 @@ class UsersService(BaseUsersService):
         return await self.user_repository.check_user_exist_by_telegram_id(
             telegram_id=user_id,
         )
+
+    async def get_all_users(self, filters: GetAllUsersFilters):
+        return await self.user_repository.get_all_user(filters=filters)

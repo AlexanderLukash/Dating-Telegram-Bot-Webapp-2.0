@@ -1,3 +1,8 @@
+from typing import (
+    Any,
+    Mapping,
+)
+
 from app.domain.entities.users import UserEntity
 
 
@@ -13,3 +18,19 @@ def convert_user_entity_to_document(user: UserEntity) -> dict:
         "about": user.about.as_generic_type() if user.about else None,
         "is_active": user.is_active,
     }
+
+
+def convert_user_document_to_entity(user_document: Mapping[str, Any]) -> UserEntity:
+    return UserEntity(
+        telegram_id=user_document["telegram_id"],
+        username=user_document["username"],
+        name=user_document["name"] if user_document["name"] else None,
+        gender=user_document["gender"] if user_document["gender"] else None,
+        age=user_document["age"] if user_document["age"] else None,
+        city=user_document["city"] if user_document["city"] else None,
+        looking_for=user_document["looking_for"]
+        if user_document["looking_for"]
+        else None,
+        about=user_document["about"] if user_document["about"] else None,
+        is_active=user_document["is_active"],
+    )

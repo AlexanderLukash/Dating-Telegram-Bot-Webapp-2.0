@@ -5,10 +5,14 @@ from abc import (
 from dataclasses import dataclass
 
 from app.domain.entities.users import UserEntity
+from app.infra.repositories.filters.users import GetAllUsersFilters
 
 
 @dataclass
 class BaseUsersRepository(ABC):
+    @abstractmethod
+    async def get_all_user(self, filters: GetAllUsersFilters): ...
+
     @abstractmethod
     async def create_user(self, user: UserEntity): ...
 
