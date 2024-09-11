@@ -11,6 +11,12 @@ from app.infra.repositories.filters.users import GetAllUsersFilters
 @dataclass
 class BaseUsersRepository(ABC):
     @abstractmethod
+    async def get_user_by_telegram_id(self, telegram_id: int) -> UserEntity: ...
+
+    @abstractmethod
+    async def check_user_is_active(self, telegram_id: int) -> bool: ...
+
+    @abstractmethod
     async def get_all_user(self, filters: GetAllUsersFilters): ...
 
     @abstractmethod

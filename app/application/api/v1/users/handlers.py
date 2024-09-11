@@ -53,3 +53,29 @@ async def get_all_users_handler(
         offset=filters.offset,
         items=[UserDetailSchema.from_entity(user) for user in users],
     )
+
+
+@router.get(
+    "/{user_id}/",
+    status_code=status.HTTP_200_OK,
+    description="Get information about the user.",
+    responses={
+        status.HTTP_200_OK: {"model": UserDetailSchema},
+        status.HTTP_400_BAD_REQUEST: {"model": ErrorSchema},
+    },
+)
+async def get_chat_with_messages_handler(
+    user_id: int,
+    container: Container = Depends(init_container),
+) -> UserDetailSchema:
+    service: BaseUsersService = container.resolve(BaseUsersService)
+
+    try:
+        user = await service.get_user(telegram_id=user_id)
+    except ApplicationException as exception:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail={"error": exception.message},
+        )
+
+    return UserDetailSchema.from_entity(user)

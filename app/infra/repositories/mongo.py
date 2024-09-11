@@ -26,6 +26,23 @@ class BaseMongoDBRepository(ABC):
 
 @dataclass
 class MongoDBUserRepository(BaseUsersRepository, BaseMongoDBRepository):
+    async def get_user_by_telegram_id(self, telegram_id: int) -> UserEntity | None:
+        user_document = await self._collection.find_one(
+            filter={"telegram_id": telegram_id},
+        )
+
+        if not user_document:
+            return None
+
+        return convert_user_document_to_entity(user_document=user_document)
+
+    async def check_user_is_active(self, telegram_id: int) -> bool:
+        user_document = await self._collection.find_one(
+            filter={"telegram_id": telegram_id, "is_active": True},
+        )
+
+        return bool(user_document)
+
     async def create_user(self, user: UserEntity):
         await self._collection.insert_one(convert_user_entity_to_document(user))
 
