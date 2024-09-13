@@ -20,6 +20,9 @@ class BaseUsersRepository(ABC):
     async def get_all_user(self, filters: GetAllUsersFilters): ...
 
     @abstractmethod
+    async def update_user_info_after_register(self, telegram_id: int, data: dict): ...
+
+    @abstractmethod
     async def create_user(self, user: UserEntity): ...
 
     @abstractmethod

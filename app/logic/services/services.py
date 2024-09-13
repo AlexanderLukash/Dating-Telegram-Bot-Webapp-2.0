@@ -32,6 +32,12 @@ class UsersService(BaseUsersService):
 
         return await self.user_repository.check_user_is_active(telegram_id=telegram_id)
 
+    async def update_user_info_after_reg(self, telegram_id: int, data: dict):
+        await self.user_repository.update_user_info_after_register(
+            telegram_id=telegram_id,
+            data=data,
+        )
+
     async def create_user(self, user: UserEntity) -> UserEntity:
         if await self.check_user_exist(user_id=user.telegram_id):
             raise UserAlreadyExistsException(user.telegram_id)

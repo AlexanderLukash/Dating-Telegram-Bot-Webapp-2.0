@@ -58,7 +58,7 @@ async def get_all_users_handler(
 @router.get(
     "/{user_id}/",
     status_code=status.HTTP_200_OK,
-    description="Get information about the user.",
+    description="Get information about the users.",
     responses={
         status.HTTP_200_OK: {"model": UserDetailSchema},
         status.HTTP_400_BAD_REQUEST: {"model": ErrorSchema},

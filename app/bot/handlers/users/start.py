@@ -3,7 +3,7 @@ from aiogram.filters import CommandStart
 from aiogram.types import Message
 from punq import Container
 
-from app.bot.handlers.user.profile import profile
+from app.bot.handlers.users.profile import profile
 from app.bot.utils.constants import (
     first_welcome_message,
     second_welcome_message,

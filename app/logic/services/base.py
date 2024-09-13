@@ -20,6 +20,9 @@ class BaseUsersService(ABC):
     async def get_user(self, telegram_id: int) -> UserEntity: ...
 
     @abstractmethod
+    async def update_user_info_after_reg(self, telegram_id: int, data: dict): ...
+
+    @abstractmethod
     async def check_user_is_active(self, telegram_id: int) -> bool: ...
 
     @abstractmethod

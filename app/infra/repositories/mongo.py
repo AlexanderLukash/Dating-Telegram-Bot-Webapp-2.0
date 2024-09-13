@@ -43,6 +43,12 @@ class MongoDBUserRepository(BaseUsersRepository, BaseMongoDBRepository):
 
         return bool(user_document)
 
+    async def update_user_info_after_register(self, telegram_id: int, data: dict):
+        await self._collection.update_one(
+            filter={"telegram_id": telegram_id},
+            update={"$set": data},
+        )
+
     async def create_user(self, user: UserEntity):
         await self._collection.insert_one(convert_user_entity_to_document(user))
 
