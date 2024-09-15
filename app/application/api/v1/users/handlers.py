@@ -27,7 +27,7 @@ router = APIRouter(
 @router.get(
     "/",
     status_code=status.HTTP_200_OK,
-    description="All chat at that moment.",
+    description="Get all users list.",
     responses={
         status.HTTP_200_OK: {"model": GetUsersResponseSchema},
         status.HTTP_400_BAD_REQUEST: {"model": ErrorSchema},
@@ -64,7 +64,7 @@ async def get_all_users_handler(
         status.HTTP_400_BAD_REQUEST: {"model": ErrorSchema},
     },
 )
-async def get_chat_with_messages_handler(
+async def get_user_handler(
     user_id: int,
     container: Container = Depends(init_container),
 ) -> UserDetailSchema:

@@ -5,6 +5,7 @@ from typing import Iterable
 from motor.core import AgnosticClient
 
 from app.domain.entities.users import UserEntity
+from app.domain.values.users import AboutText
 from app.infra.repositories.base import BaseUsersRepository
 from app.infra.repositories.converters import (
     convert_user_document_to_entity,
@@ -47,6 +48,12 @@ class MongoDBUserRepository(BaseUsersRepository, BaseMongoDBRepository):
         await self._collection.update_one(
             filter={"telegram_id": telegram_id},
             update={"$set": data},
+        )
+
+    async def update_user_about(self, telegram_id: int, about: AboutText):
+        await self._collection.update_one(
+            filter={"telegram_id": telegram_id},
+            update={"$set": {"about": about.as_generic_type()}},
         )
 
     async def create_user(self, user: UserEntity):

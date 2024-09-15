@@ -80,6 +80,9 @@ class AboutText(BaseValueObject):
     value: str | None
 
     def validate(self):
+        if self.value is None:
+            return None
+
         if len(self.value) > 125:
             raise AboutTextTooLongException(self.value)
 
@@ -87,4 +90,7 @@ class AboutText(BaseValueObject):
             raise AboutTextTooShortException(self.value)
 
     def as_generic_type(self) -> str | None:
+        if self.value is None:
+            return None
+
         return str(self.value)

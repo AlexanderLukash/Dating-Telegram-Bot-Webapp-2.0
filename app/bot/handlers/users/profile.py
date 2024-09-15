@@ -1,31 +1,39 @@
-from aiogram import Router
+from aiogram import (
+    F,
+    Router,
+)
 from aiogram.filters import Command
 from aiogram.types import (
     Message,
-    User,
+    Update,
 )
+from punq import Container
+
+from app.bot.keyboards.inline import profile_inline_kb
+from app.bot.utils.constants import profile_text_message
+from app.logic.init import init_container
+from app.logic.services.base import BaseUsersService
 
 
 user_profile_router: Router = Router(
-    name="User router",
+    name="User profile router",
 )
 
 
-def welcome_message(user: User) -> str:
-    message: str = (
-        f"Hello, {user.first_name}!\n"
-        "Welcome to our dating app!\n\n"
-        "On our platform, you can:\n"
-        "- Find new friends and partners\n"
-        "- Use our convenient filters to match profiles\n"
-        "- Communicate through private messages\n"
-        "- And much more!\n\n"
-        "If you have any questions or suggestions, feel free to contact our support team.\n"
-        "We wish you an enjoyable experience and good luck in your search!\n"
-    )
-    return message
-
-
 @user_profile_router.message(Command("profile"))
-async def profile(message: Message):
-    await message.answer("Profile")
+@user_profile_router.callback_query(F.data == "profile_page")
+async def profile(update: Update, container: Container = init_container()):
+    service: BaseUsersService = container.resolve(BaseUsersService)
+
+    if isinstance(update, Message):
+        user = await service.get_user(telegram_id=update.from_user.id)
+        await update.answer(
+            text=profile_text_message(user=user),
+            reply_markup=profile_inline_kb(user_id=update.from_user.id, liked_by=False),
+        )
+    else:
+        user = await service.get_user(telegram_id=update.from_user.id)
+        await update.message.edit_text(
+            text=profile_text_message(user=user),
+            reply_markup=profile_inline_kb(user_id=update.from_user.id, liked_by=False),
+        )

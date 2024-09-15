@@ -5,6 +5,7 @@ from abc import (
 from dataclasses import dataclass
 
 from app.domain.entities.users import UserEntity
+from app.domain.values.users import AboutText
 from app.infra.repositories.filters.users import GetAllUsersFilters
 
 
@@ -21,6 +22,9 @@ class BaseUsersRepository(ABC):
 
     @abstractmethod
     async def update_user_info_after_register(self, telegram_id: int, data: dict): ...
+
+    @abstractmethod
+    async def update_user_about(self, telegram_id: int, about: AboutText): ...
 
     @abstractmethod
     async def create_user(self, user: UserEntity): ...

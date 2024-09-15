@@ -11,3 +11,7 @@ class UserForm(StatesGroup):
     city = State()
     looking_for = State()
     about = State()
+
+
+class UserAboutUpdate(StatesGroup):
+    about = State()
