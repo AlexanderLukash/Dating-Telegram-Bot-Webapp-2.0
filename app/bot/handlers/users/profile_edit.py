@@ -40,4 +40,4 @@ async def about_edit_state(
 
         await profile(message)
     except ApplicationException as exception:
-        await message.answer(text=exception.message)
+        await message.answer(text=exception.message + " Enter the text again.")

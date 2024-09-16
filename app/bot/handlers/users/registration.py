@@ -102,7 +102,7 @@ async def user_set_about(message: Message, state: FSMContext):
 
 
 @registration_router.message(UserForm.about)
-async def user_photo(
+async def user_set_photo(
     message: Message,
     state: FSMContext,
     container: Container = init_container(),
@@ -128,7 +128,7 @@ async def user_photo(
     )
 
     user = await service.get_user(telegram_id=message.from_user.id)
-
+    await state.clear()
     await message.answer(text=profile_text_message(user=user))
 
 

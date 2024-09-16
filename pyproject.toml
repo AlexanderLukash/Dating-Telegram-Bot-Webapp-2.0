@@ -15,6 +15,7 @@ environs = "^11.0.0"
 betterlogging = "^1.0.0"
 punq = "^0.7.0"
 motor = "^3.5.1"
+aiobotocore = "^2.15.0"
 
 
 [tool.poetry.group.dev.dependencies]
