@@ -23,6 +23,7 @@ class UserEntity(BaseEntity):
     city: Optional[City] = None
     looking_for: Optional[Gender] = None
     about: Optional[AboutText] = None
+    photo: Optional[str] = None
     is_active: bool = False
 
     @classmethod

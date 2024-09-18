@@ -8,6 +8,11 @@ from punq import (
 
 from app.infra.repositories.base import BaseUsersRepository
 from app.infra.repositories.mongo import MongoDBUserRepository
+from app.infra.s3.base import BaseS3Storage
+from app.infra.s3.storage import (
+    BaseS3Client,
+    S3Storage,
+)
 from app.logic.services.base import BaseUsersService
 from app.logic.services.services import UsersService
 from app.settings.config import Config
@@ -48,6 +53,36 @@ def _init_container() -> Container:
     container.register(
         BaseUsersRepository,
         factory=init_users_mongodb_repository,
+        scope=Scope.singleton,
+    )
+
+    def create_s3_client() -> BaseS3Client:
+        return BaseS3Client(
+            aws_access_key_id=config.aws_access_key_id,
+            aws_secret_access_key=config.aws_secret_access_key,
+            bucket_name=config.bucket_name,
+            region_name=config.region_name,
+        )
+
+    container.register(
+        BaseS3Client,
+        factory=create_s3_client,
+        scope=Scope.singleton,
+    )
+
+    def init_s3_storage() -> S3Storage:
+        s3_client = container.resolve(BaseS3Client)
+
+        return S3Storage(
+            aws_access_key_id=s3_client.aws_access_key_id,
+            aws_secret_access_key=s3_client.aws_secret_access_key,
+            bucket_name=s3_client.bucket_name,
+            region_name=s3_client.region_name,
+        )
+
+    container.register(
+        BaseS3Storage,
+        factory=init_s3_storage,
         scope=Scope.singleton,
     )
 

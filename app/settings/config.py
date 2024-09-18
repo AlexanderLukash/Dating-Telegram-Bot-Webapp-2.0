@@ -20,6 +20,20 @@ class Config(BaseSettings):
         alias="MONGO_DB_LIKES_COLLECTION",
     )
 
+    aws_access_key_id: str = Field(
+        alias="AWS_ACCESS_KEY_ID",
+    )
+    aws_secret_access_key: str = Field(
+        alias="AWS_SECRET_ACCESS_KEY",
+    )
+    bucket_name: str = Field(
+        alias="S3_BUCKET_NAME",
+    )
+    region_name: str = Field(
+        default="us-east-1",
+        alias="S3_REGION_NAME",
+    )
+
     @property
     def full_webhook_url(self) -> str:
         return f"{self.url_webhook}/api/v1/webhook"

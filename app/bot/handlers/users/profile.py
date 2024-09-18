@@ -4,8 +4,8 @@ from aiogram import (
 )
 from aiogram.filters import Command
 from aiogram.types import (
+    CallbackQuery,
     Message,
-    Update,
 )
 from punq import Container
 
@@ -22,13 +22,17 @@ user_profile_router: Router = Router(
 
 @user_profile_router.message(Command("profile"))
 @user_profile_router.callback_query(F.data == "profile_page")
-async def profile(update: Update, container: Container = init_container()):
+async def profile(
+    update: Message | CallbackQuery,
+    container: Container = init_container(),
+):
     service: BaseUsersService = container.resolve(BaseUsersService)
 
     if isinstance(update, Message):
         user = await service.get_user(telegram_id=update.from_user.id)
-        await update.answer(
-            text=profile_text_message(user=user),
+        await update.answer_photo(
+            photo=user.photo,
+            caption=profile_text_message(user=user),
             reply_markup=profile_inline_kb(user_id=update.from_user.id, liked_by=False),
         )
     else:

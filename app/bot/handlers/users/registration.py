@@ -1,9 +1,14 @@
-from aiogram import Router
+from aiogram import (
+    Bot,
+    F,
+    Router,
+)
 from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
 from aiogram.types import Message
 from punq import Container
 
+from app.bot.handlers.users.profile import profile
 from app.bot.keyboards.reply import (
     about_skip_keyboard,
     gender_select_keyboard,
@@ -13,6 +18,7 @@ from app.bot.keyboards.reply import (
 from app.bot.utils.constants import profile_text_message
 from app.bot.utils.states import UserForm
 from app.domain.exceptions.base import ApplicationException
+from app.infra.s3.base import BaseS3Storage
 from app.logic.init import init_container
 from app.logic.services.base import BaseUsersService
 
@@ -105,31 +111,55 @@ async def user_set_about(message: Message, state: FSMContext):
 async def user_set_photo(
     message: Message,
     state: FSMContext,
-    container: Container = init_container(),
 ):
-    service: BaseUsersService = container.resolve(BaseUsersService)
-
     if message.text.lower() == "🪪 skip":
         await state.update_data(about=None)
     else:
         await state.update_data(about=message.text)
 
+    await state.set_state(UserForm.photo)
     await message.answer(
-        text="Registration is successful.",
+        text="Send your photo.",
         reply_markup=remove_keyboard,
     )
 
-    data = await state.get_data()
-    data["is_active"] = True
 
+@registration_router.message(UserForm.photo, F.photo)
+async def user_reg(
+    message: Message,
+    state: FSMContext,
+    bot: Bot,
+    container: Container = init_container(),
+):
+    uploader: BaseS3Storage = container.resolve(BaseS3Storage)
+    service: BaseUsersService = container.resolve(BaseUsersService)
+    data = await state.get_data()
+    await state.clear()
+
+    photo_file_id = message.photo[-1].file_id
+    file = await bot.get_file(photo_file_id)
+    file_path = file.file_path
+    photo_file_stream = await bot.download_file(file_path)
+    photo_file_bytes = photo_file_stream.read()
+
+    photo_url = await uploader.upload_file(
+        file=photo_file_bytes,
+        file_name=f"{message.from_user.id}.png",
+    )
+
+    data["photo"] = photo_url
+    data["is_active"] = True
     await service.update_user_info_after_reg(
         telegram_id=message.from_user.id,
         data=data,
     )
 
-    user = await service.get_user(telegram_id=message.from_user.id)
-    await state.clear()
-    await message.answer(text=profile_text_message(user=user))
+    await profile(message)
+
+
+@registration_router.message(UserForm.photo, ~F.photo)
+async def user_photo_error(message: Message, state: FSMContext):
+    await message.answer("Send a photo!")
 
 
 @registration_router.message(Command("form"))
