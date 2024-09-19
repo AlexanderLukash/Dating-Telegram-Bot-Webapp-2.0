@@ -73,6 +73,26 @@ def re_registration_confirm_keyboard():
     return keyboard
 
 
+def photo_confirm_keyboard():
+    keyboard = InlineKeyboardMarkup(
+        inline_keyboard=[
+            [
+                InlineKeyboardButton(
+                    text="Yes ✅",
+                    callback_data="photo_confirm",
+                    one_time=True,
+                ),
+                InlineKeyboardButton(
+                    text="No ❎",
+                    callback_data="profile_edit",
+                    one_time=True,
+                ),
+            ],
+        ],
+    )
+    return keyboard
+
+
 def about_confirm_keyboard():
     keyboard = InlineKeyboardMarkup(
         inline_keyboard=[

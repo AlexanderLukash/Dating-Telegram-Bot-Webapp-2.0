@@ -1,3 +1,5 @@
+import time
+
 from aiogram import (
     F,
     Router,
@@ -28,16 +30,18 @@ async def profile(
 ):
     service: BaseUsersService = container.resolve(BaseUsersService)
 
+    user = await service.get_user(telegram_id=update.from_user.id)
+
     if isinstance(update, Message):
-        user = await service.get_user(telegram_id=update.from_user.id)
         await update.answer_photo(
-            photo=user.photo,
+            photo=f"{user.photo}?nocache={int(time.time())}",
             caption=profile_text_message(user=user),
             reply_markup=profile_inline_kb(user_id=update.from_user.id, liked_by=False),
         )
     else:
-        user = await service.get_user(telegram_id=update.from_user.id)
-        await update.message.edit_text(
-            text=profile_text_message(user=user),
+        await update.message.delete()
+        await update.message.answer_photo(
+            photo=f"{user.photo}?nocache={int(time.time())}",
+            caption=profile_text_message(user=user),
             reply_markup=profile_inline_kb(user_id=update.from_user.id, liked_by=False),
         )

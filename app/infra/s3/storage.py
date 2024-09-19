@@ -25,7 +25,6 @@ class BaseS3Client(ABC):
             "s3",
             aws_access_key_id=self.aws_access_key_id,
             aws_secret_access_key=self.aws_secret_access_key,
-            region_name=self.region_name,
         ) as client:
             yield client
 
@@ -34,4 +33,4 @@ class S3Storage(BaseS3Storage, BaseS3Client):
     async def upload_file(self, file: bytes, file_name: str) -> str:
         async with self.get_client() as client:
             await client.put_object(Bucket=self.bucket_name, Key=file_name, Body=file)
-            return f"https://{self.bucket_name}.s3.{self.region_name}.amazonaws.com/{file_name}"
+            return f"https://{self.bucket_name}.s3.amazonaws.com/{file_name}"

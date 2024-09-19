@@ -16,3 +16,7 @@ class UserForm(StatesGroup):
 
 class UserAboutUpdate(StatesGroup):
     about = State()
+
+
+class UserPhotoUpdate(StatesGroup):
+    photo = State()

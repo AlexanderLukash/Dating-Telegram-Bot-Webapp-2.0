@@ -7,6 +7,7 @@ from aiogram.types import CallbackQuery
 
 from app.bot.keyboards.inline import (
     about_confirm_keyboard,
+    photo_confirm_keyboard,
     profile_edit_keyboard,
     re_registration_confirm_keyboard,
 )
@@ -17,6 +18,7 @@ from app.bot.keyboards.reply import (
 from app.bot.utils.states import (
     UserAboutUpdate,
     UserForm,
+    UserPhotoUpdate,
 )
 
 
@@ -25,7 +27,8 @@ callback_profile_router = Router()
 
 @callback_profile_router.callback_query(F.data == "profile_edit")
 async def profile_edit(callback: CallbackQuery):
-    await callback.message.edit_text(
+    await callback.message.delete()
+    await callback.message.answer(
         text="1. Cancel.\n"
         "2. Fill out the profile again.\n"
         "3. Change photo.\n"
@@ -52,6 +55,22 @@ async def form_edit(callback: CallbackQuery, state: FSMContext):
     )
 
 
+@callback_profile_router.callback_query(F.data == "photo_edit")
+async def photo_profile(callback: CallbackQuery):
+    await callback.message.edit_text(
+        text="Are you sure you want to change your photo?",
+        reply_markup=photo_confirm_keyboard(),
+    )
+
+
+@callback_profile_router.callback_query(F.data == "photo_confirm")
+async def photo_edit(callback: CallbackQuery, state: FSMContext):
+    await callback.message.delete()
+    await state.set_state(UserPhotoUpdate.photo)
+
+    await callback.message.answer(text="Send us a new photo for your profile.")
+
+
 @callback_profile_router.callback_query(F.data == "about_edit")
 async def about_edit(callback: CallbackQuery):
     await callback.message.edit_text(
@@ -65,8 +84,8 @@ async def about_edit_confirm(callback: CallbackQuery, state: FSMContext):
     await state.set_state(
         UserAboutUpdate.about,
     )
-
-    await callback.message.edit_text(
+    await callback.message.delete()
+    await callback.message.answer(
         text="Tell us something about yourself that might interest someone, "
         "or click the button to leave this field blank.",
         reply_markup=about_skip_keyboard,
