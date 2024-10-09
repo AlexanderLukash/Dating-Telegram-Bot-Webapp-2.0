@@ -18,6 +18,7 @@ def convert_user_entity_to_document(user: UserEntity) -> dict:
         "about": user.about.as_generic_type() if user.about else None,
         "photo": user.photo if user.photo else None,
         "is_active": user.is_active,
+        "created_at": user.created_at,
     }
 
 
@@ -35,4 +36,5 @@ def convert_user_document_to_entity(user_document: Mapping[str, Any]) -> UserEnt
         about=user_document["about"] if user_document["about"] else None,
         photo=user_document["photo"] if user_document["photo"] else None,
         is_active=user_document["is_active"],
+        created_at=user_document["created_at"],
     )

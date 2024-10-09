@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from datetime import datetime
 from typing import Optional
 
 from aiogram.types import User
@@ -32,4 +33,5 @@ class UserEntity(BaseEntity):
             telegram_id=user.id,
             username=user.username or "",
             name=Name(user.first_name),
+            created_at=datetime.now()
         )
