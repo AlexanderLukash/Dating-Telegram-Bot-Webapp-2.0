@@ -3,6 +3,7 @@ from typing import (
     Mapping,
 )
 
+from app.domain.entities.likes import LikesEntity
 from app.domain.entities.users import UserEntity
 
 
@@ -38,3 +39,11 @@ def convert_user_document_to_entity(user_document: Mapping[str, Any]) -> UserEnt
         is_active=user_document["is_active"],
         created_at=user_document["created_at"],
     )
+
+
+def convert_like_entity_to_document(like: LikesEntity) -> dict:
+    return {
+        "from_user": like.from_user,
+        "to_user": like.to_user,
+        "created_at": like.created_at
+    }

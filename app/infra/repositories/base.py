@@ -4,6 +4,7 @@ from abc import (
 )
 from dataclasses import dataclass
 
+from app.domain.entities.likes import LikesEntity
 from app.domain.entities.users import UserEntity
 from app.domain.values.users import AboutText
 from app.infra.repositories.filters.users import GetAllUsersFilters
@@ -31,3 +32,18 @@ class BaseUsersRepository(ABC):
 
     @abstractmethod
     async def check_user_exist_by_telegram_id(self, telegram_id: int) -> bool: ...
+
+
+@dataclass
+class BaseLikesRepository(ABC):
+    @abstractmethod
+    async def get_user_likes(self, user_id: int): ...
+
+    @abstractmethod
+    async def get_user_liked_by_user_id(self, user_id: int): ...
+
+    @abstractmethod
+    async def create_like(self, like: LikesEntity) -> LikesEntity: ...
+
+    @abstractmethod
+    async def delete_like(self, like: LikesEntity): ...

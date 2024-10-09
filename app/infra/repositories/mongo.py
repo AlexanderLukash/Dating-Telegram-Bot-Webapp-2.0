@@ -4,12 +4,13 @@ from typing import Iterable
 
 from motor.core import AgnosticClient
 
+from app.domain.entities.likes import LikesEntity
 from app.domain.entities.users import UserEntity
 from app.domain.values.users import AboutText
-from app.infra.repositories.base import BaseUsersRepository
+from app.infra.repositories.base import BaseUsersRepository, BaseLikesRepository
 from app.infra.repositories.converters import (
     convert_user_document_to_entity,
-    convert_user_entity_to_document,
+    convert_user_entity_to_document, convert_like_entity_to_document,
 )
 from app.infra.repositories.filters.users import GetAllUsersFilters
 
@@ -67,8 +68,8 @@ class MongoDBUserRepository(BaseUsersRepository, BaseMongoDBRepository):
         )
 
     async def get_all_user(
-        self,
-        filters: GetAllUsersFilters,
+            self,
+            filters: GetAllUsersFilters,
     ) -> tuple[Iterable[UserEntity], int]:
         cursor = self._collection.find().skip(filters.offset).limit(filters.limit)
 
@@ -79,3 +80,10 @@ class MongoDBUserRepository(BaseUsersRepository, BaseMongoDBRepository):
         ]
 
         return chats, count
+
+
+@dataclass
+class MongoDBLikesRepository(BaseLikesRepository, BaseMongoDBRepository):
+    async def create_like(self, like: LikesEntity) -> LikesEntity:
+        await self._collection.insert_one(convert_like_entity_to_document(like))
+        return like

@@ -6,7 +6,7 @@ from punq import (
     Scope,
 )
 
-from app.infra.repositories.base import BaseUsersRepository
+from app.infra.repositories.base import BaseUsersRepository, BaseLikesRepository
 from app.infra.repositories.mongo import MongoDBUserRepository
 from app.infra.s3.base import BaseS3Storage
 from app.infra.s3.storage import (
@@ -50,9 +50,22 @@ def _init_container() -> Container:
             mongo_db_collection_name=config.mongodb_users_collection,
         )
 
+    def init_likes_mongodb_repository() -> BaseUsersRepository:
+        return MongoDBUserRepository(
+            mongo_db_client=client,
+            mongo_db_name=config.mongodb_dating_database,
+            mongo_db_collection_name=config.mongodb_likes_collection,
+        )
+
     container.register(
         BaseUsersRepository,
         factory=init_users_mongodb_repository,
+        scope=Scope.singleton,
+    )
+
+    container.register(
+        BaseLikesRepository,
+        factory=init_likes_mongodb_repository,
         scope=Scope.singleton,
     )
 
