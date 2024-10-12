@@ -38,3 +38,9 @@ class BaseUsersService(ABC):
 class BaseLikesService(ABC):
     @abstractmethod
     async def create_like(self, from_user_id: int, to_user_id: int) -> LikesEntity: ...
+
+    @abstractmethod
+    async def delete_like(self, from_user_id: int, to_user_id: int): ...
+
+    @abstractmethod
+    async def get_like_from_user(self, from_user_id: int): ...

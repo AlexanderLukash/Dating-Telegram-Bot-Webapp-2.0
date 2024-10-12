@@ -1,10 +1,13 @@
 from dataclasses import dataclass
+from typing import Iterable
 
 from app.domain.entities.likes import LikesEntity
+from app.domain.entities.users import UserEntity
 from app.domain.values.likes import Like
 from app.infra.repositories.base import BaseLikesRepository
 from app.logic.exceptions.likes import (
     LikeAlreadyExistsException,
+    LikeIsNotExistsException,
     LikeTheSameUserException,
 )
 from app.logic.services.base import BaseLikesService
@@ -24,6 +27,23 @@ class LikesService(BaseLikesService):
         if from_user == to_user:
             raise LikeTheSameUserException()
 
-        new_like = LikesEntity(from_user=from_user, to_user=to_user)
+        new_like = LikesEntity(
+            from_user=from_user,
+            to_user=to_user,
+        )
         await self.like_repository.create_like(new_like)
         return new_like
+
+    async def delete_like(self, from_user_id: int, to_user_id: int):
+        if await self.like_repository.check_like_is_exists(from_user_id, to_user_id):
+            await self.like_repository.delete_like(
+                from_user=from_user_id,
+                to_user=to_user_id,
+            )
+
+        else:
+            raise LikeIsNotExistsException()
+
+    async def get_like_from_user(self, from_user_id: int) -> Iterable[UserEntity]:
+        users = await self.like_repository.get_users_liked_from(from_user_id)
+        return users

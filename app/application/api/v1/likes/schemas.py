@@ -2,6 +2,7 @@ from datetime import datetime
 
 from pydantic import BaseModel
 
+from app.application.api.v1.users.schemas import UserDetailSchema
 from app.domain.entities.likes import LikesEntity
 
 
@@ -22,3 +23,24 @@ class CreateLikeResponseSchema(BaseModel):
             to_user=like.to_user.as_generic_type(),
             created_at=like.created_at,
         )
+
+
+class DeleteLikeRequestSchema(BaseModel):
+    from_user: int
+    to_user: int
+
+
+class DeleteLikeResponseSchema(BaseModel):
+    deleted: bool
+    message: str
+
+    @classmethod
+    def delete_response(cls) -> "DeleteLikeResponseSchema":
+        return DeleteLikeResponseSchema(
+            deleted=True,
+            message="Like was deleted.",
+        )
+
+
+class GetUsersFromResponseSchema(BaseModel):
+    items: list[UserDetailSchema]

@@ -88,6 +88,9 @@ class MongoDBUserRepository(BaseUsersRepository, BaseMongoDBRepository):
 
 @dataclass
 class MongoDBLikesRepository(BaseLikesRepository, BaseMongoDBRepository):
+    # TODO: Переписать цю хуйню
+    user_repository: MongoDBUserRepository
+
     async def check_like_is_exists(self, from_user: int, to_user: int) -> bool:
         return bool(
             await self._collection.find_one(
@@ -102,8 +105,29 @@ class MongoDBLikesRepository(BaseLikesRepository, BaseMongoDBRepository):
         await self._collection.insert_one(convert_like_entity_to_document(like))
         return like
 
-    async def get_user_liked_by_user_id(self, user_id: int): ...
+    async def get_users_liked_from(self, user_id: int) -> Iterable[UserEntity]:
+        users_documents = self._collection.find(
+            filter={"from_user": user_id},
+        )
 
-    async def get_user_likes(self, user_id: int): ...
+        result = []
+        async for user_document in users_documents:
+            telegram_id = user_document.get("user_to")
+            if telegram_id:
+                user_entity = await self.user_repository.get_user_by_telegram_id(
+                    telegram_id,
+                )
+                if user_entity:
+                    result.append(user_entity)
 
-    async def delete_like(self, like: LikesEntity): ...
+        return result
+
+    async def get_user_liked_by(self, user_id: int): ...
+
+    async def delete_like(self, from_user: int, to_user: int):
+        await self._collection.delete_one(
+            filter={
+                "from_user": from_user,
+                "to_user": to_user,
+            },
+        )
