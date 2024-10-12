@@ -4,6 +4,7 @@ from abc import (
 )
 from dataclasses import dataclass
 
+from app.domain.entities.likes import LikesEntity
 from app.domain.entities.users import UserEntity
 from app.domain.values.users import AboutText
 from app.infra.repositories.filters.users import GetAllUsersFilters
@@ -31,3 +32,9 @@ class BaseUsersService(ABC):
 
     @abstractmethod
     async def get_all_users(self, filters: GetAllUsersFilters): ...
+
+
+@dataclass
+class BaseLikesService(ABC):
+    @abstractmethod
+    async def create_like(self, from_user_id: int, to_user_id: int) -> LikesEntity: ...

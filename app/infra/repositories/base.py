@@ -37,6 +37,9 @@ class BaseUsersRepository(ABC):
 @dataclass
 class BaseLikesRepository(ABC):
     @abstractmethod
+    async def check_like_is_exists(self, from_user: int, to_user: int) -> bool: ...
+
+    @abstractmethod
     async def get_user_likes(self, user_id: int): ...
 
     @abstractmethod

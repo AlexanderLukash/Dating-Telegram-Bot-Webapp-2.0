@@ -7,10 +7,14 @@ from motor.core import AgnosticClient
 from app.domain.entities.likes import LikesEntity
 from app.domain.entities.users import UserEntity
 from app.domain.values.users import AboutText
-from app.infra.repositories.base import BaseUsersRepository, BaseLikesRepository
+from app.infra.repositories.base import (
+    BaseLikesRepository,
+    BaseUsersRepository,
+)
 from app.infra.repositories.converters import (
+    convert_like_entity_to_document,
     convert_user_document_to_entity,
-    convert_user_entity_to_document, convert_like_entity_to_document,
+    convert_user_entity_to_document,
 )
 from app.infra.repositories.filters.users import GetAllUsersFilters
 
@@ -68,8 +72,8 @@ class MongoDBUserRepository(BaseUsersRepository, BaseMongoDBRepository):
         )
 
     async def get_all_user(
-            self,
-            filters: GetAllUsersFilters,
+        self,
+        filters: GetAllUsersFilters,
     ) -> tuple[Iterable[UserEntity], int]:
         cursor = self._collection.find().skip(filters.offset).limit(filters.limit)
 
@@ -84,6 +88,22 @@ class MongoDBUserRepository(BaseUsersRepository, BaseMongoDBRepository):
 
 @dataclass
 class MongoDBLikesRepository(BaseLikesRepository, BaseMongoDBRepository):
+    async def check_like_is_exists(self, from_user: int, to_user: int) -> bool:
+        return bool(
+            await self._collection.find_one(
+                filter={
+                    "from_user": from_user,
+                    "to_user": to_user,
+                },
+            ),
+        )
+
     async def create_like(self, like: LikesEntity) -> LikesEntity:
         await self._collection.insert_one(convert_like_entity_to_document(like))
         return like
+
+    async def get_user_liked_by_user_id(self, user_id: int): ...
+
+    async def get_user_likes(self, user_id: int): ...
+
+    async def delete_like(self, like: LikesEntity): ...

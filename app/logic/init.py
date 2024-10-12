@@ -6,15 +6,25 @@ from punq import (
     Scope,
 )
 
-from app.infra.repositories.base import BaseUsersRepository, BaseLikesRepository
-from app.infra.repositories.mongo import MongoDBUserRepository
+from app.infra.repositories.base import (
+    BaseLikesRepository,
+    BaseUsersRepository,
+)
+from app.infra.repositories.mongo import (
+    MongoDBLikesRepository,
+    MongoDBUserRepository,
+)
 from app.infra.s3.base import BaseS3Storage
 from app.infra.s3.storage import (
     BaseS3Client,
     S3Storage,
 )
-from app.logic.services.base import BaseUsersService
-from app.logic.services.services import UsersService
+from app.logic.services.base import (
+    BaseLikesService,
+    BaseUsersService,
+)
+from app.logic.services.likes import LikesService
+from app.logic.services.users import UsersService
 from app.settings.config import Config
 
 
@@ -50,8 +60,8 @@ def _init_container() -> Container:
             mongo_db_collection_name=config.mongodb_users_collection,
         )
 
-    def init_likes_mongodb_repository() -> BaseUsersRepository:
-        return MongoDBUserRepository(
+    def init_likes_mongodb_repository() -> BaseLikesRepository:
+        return MongoDBLikesRepository(
             mongo_db_client=client,
             mongo_db_name=config.mongodb_dating_database,
             mongo_db_collection_name=config.mongodb_likes_collection,
@@ -102,9 +112,18 @@ def _init_container() -> Container:
     def init_users_service() -> UsersService:
         return UsersService(user_repository=container.resolve(BaseUsersRepository))
 
+    def init_likes_service() -> LikesService:
+        return LikesService(like_repository=container.resolve(BaseLikesRepository))
+
     container.register(
         BaseUsersService,
         factory=init_users_service,
+        scope=Scope.singleton,
+    )
+
+    container.register(
+        BaseLikesService,
+        factory=init_likes_service,
         scope=Scope.singleton,
     )
 

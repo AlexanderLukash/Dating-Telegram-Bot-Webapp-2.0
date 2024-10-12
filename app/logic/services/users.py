@@ -4,7 +4,7 @@ from app.domain.entities.users import UserEntity
 from app.domain.values.users import AboutText
 from app.infra.repositories.base import BaseUsersRepository
 from app.infra.repositories.filters.users import GetAllUsersFilters
-from app.logic.exceptions.user import (
+from app.logic.exceptions.users import (
     UserAlreadyExistsException,
     UserNotFoundException,
 )

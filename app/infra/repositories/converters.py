@@ -43,7 +43,7 @@ def convert_user_document_to_entity(user_document: Mapping[str, Any]) -> UserEnt
 
 def convert_like_entity_to_document(like: LikesEntity) -> dict:
     return {
-        "from_user": like.from_user,
-        "to_user": like.to_user,
-        "created_at": like.created_at
+        "from_user": like.from_user.as_generic_type(),
+        "to_user": like.to_user.as_generic_type(),
+        "created_at": like.created_at,
     }
