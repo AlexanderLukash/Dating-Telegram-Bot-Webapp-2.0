@@ -1,8 +1,7 @@
 from dataclasses import dataclass
-from typing import Iterable
 
+from app.bot.utils.notificator import send_liked_message
 from app.domain.entities.likes import LikesEntity
-from app.domain.entities.users import UserEntity
 from app.domain.values.likes import Like
 from app.infra.repositories.base import BaseLikesRepository
 from app.logic.exceptions.likes import (
@@ -16,6 +15,17 @@ from app.logic.services.base import BaseLikesService
 @dataclass
 class LikesService(BaseLikesService):
     like_repository: BaseLikesRepository
+
+    async def check_match(self, from_user_id: int, to_user_id: int) -> bool:
+        if await self.like_repository.check_like_is_exists(
+            from_user_id,
+            to_user_id,
+        ) and await self.like_repository.check_like_is_exists(
+            to_user_id,
+            from_user_id,
+        ):
+            return True
+        return False
 
     async def create_like(self, from_user_id: int, to_user_id: int) -> LikesEntity:
         if await self.like_repository.check_like_is_exists(from_user_id, to_user_id):
@@ -32,6 +42,11 @@ class LikesService(BaseLikesService):
             to_user=to_user,
         )
         await self.like_repository.create_like(new_like)
+        if await self.check_match(
+            from_user_id=from_user_id,
+            to_user_id=to_user_id,
+        ):
+            await send_liked_message(from_user_id, to_user_id)
         return new_like
 
     async def delete_like(self, from_user_id: int, to_user_id: int):
@@ -44,6 +59,14 @@ class LikesService(BaseLikesService):
         else:
             raise LikeIsNotExistsException()
 
-    async def get_like_from_user(self, from_user_id: int) -> Iterable[UserEntity]:
-        users = await self.like_repository.get_users_liked_from(from_user_id)
-        return users
+    async def get_telegram_id_liked_from(self, user_id: int) -> list[int]:
+        telegram_ids = await self.like_repository.get_users_ids_liked_from(
+            user_id=user_id,
+        )
+        return telegram_ids
+
+    async def get_users_ids_liked_by(self, user_id: int) -> list[int]:
+        telegram_ids = await self.like_repository.get_users_ids_liked_by(
+            user_id=user_id,
+        )
+        return telegram_ids

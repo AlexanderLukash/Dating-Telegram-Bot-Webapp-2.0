@@ -22,6 +22,7 @@ aiobotocore = "^2.15.0"
 pre-commit = "^3.7.1"
 pytest = "^8.3.2"
 pydantic-settings = "^2.4.0"
+faker = "^30.6.0"
 
 [build-system]
 requires = ["poetry-core"]

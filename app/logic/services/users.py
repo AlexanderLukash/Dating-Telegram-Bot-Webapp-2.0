@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from typing import Iterable
 
 from app.domain.entities.users import UserEntity
 from app.domain.values.users import AboutText
@@ -56,5 +57,11 @@ class UsersService(BaseUsersService):
             telegram_id=user_id,
         )
 
-    async def get_all_users(self, filters: GetAllUsersFilters):
+    async def get_all_users(self, filters: GetAllUsersFilters) -> Iterable[UserEntity]:
         return await self.user_repository.get_all_user(filters=filters)
+
+    async def get_users_liked_from(self, users_list: list[int]) -> Iterable[UserEntity]:
+        return await self.user_repository.get_users_liked_from(user_list=users_list)
+
+    async def get_users_liked_by(self, users_list: list[int]) -> Iterable[UserEntity]:
+        return await self.user_repository.get_users_liked_by(user_list=users_list)

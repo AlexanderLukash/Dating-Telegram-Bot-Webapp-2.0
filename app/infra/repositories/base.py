@@ -3,6 +3,7 @@ from abc import (
     abstractmethod,
 )
 from dataclasses import dataclass
+from typing import Iterable
 
 from app.domain.entities.likes import LikesEntity
 from app.domain.entities.users import UserEntity
@@ -33,6 +34,18 @@ class BaseUsersRepository(ABC):
     @abstractmethod
     async def check_user_exist_by_telegram_id(self, telegram_id: int) -> bool: ...
 
+    @abstractmethod
+    async def get_users_liked_from(
+        self,
+        user_list: list[int],
+    ) -> Iterable[UserEntity]: ...
+
+    @abstractmethod
+    async def get_users_liked_by(
+        self,
+        user_list: list[int],
+    ) -> Iterable[UserEntity]: ...
+
 
 @dataclass
 class BaseLikesRepository(ABC):
@@ -40,13 +53,13 @@ class BaseLikesRepository(ABC):
     async def check_like_is_exists(self, from_user: int, to_user: int) -> bool: ...
 
     @abstractmethod
-    async def get_users_liked_from(self, user_id: int): ...
-
-    @abstractmethod
-    async def get_user_liked_by(self, user_id: int): ...
-
-    @abstractmethod
     async def create_like(self, like: LikesEntity) -> LikesEntity: ...
 
     @abstractmethod
     async def delete_like(self, from_user: int, to_user: int): ...
+
+    @abstractmethod
+    async def get_users_ids_liked_from(self, user_id: int) -> list[int]: ...
+
+    @abstractmethod
+    async def get_users_ids_liked_by(self, user_id: int) -> list[int]: ...

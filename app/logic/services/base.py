@@ -3,6 +3,7 @@ from abc import (
     abstractmethod,
 )
 from dataclasses import dataclass
+from typing import Iterable
 
 from app.domain.entities.likes import LikesEntity
 from app.domain.entities.users import UserEntity
@@ -33,6 +34,18 @@ class BaseUsersService(ABC):
     @abstractmethod
     async def get_all_users(self, filters: GetAllUsersFilters): ...
 
+    @abstractmethod
+    async def get_users_liked_from(
+        self,
+        users_list: list[int],
+    ) -> Iterable[UserEntity]: ...
+
+    @abstractmethod
+    async def get_users_liked_by(
+        self,
+        users_list: list[int],
+    ) -> Iterable[UserEntity]: ...
+
 
 @dataclass
 class BaseLikesService(ABC):
@@ -43,4 +56,10 @@ class BaseLikesService(ABC):
     async def delete_like(self, from_user_id: int, to_user_id: int): ...
 
     @abstractmethod
-    async def get_like_from_user(self, from_user_id: int): ...
+    async def get_telegram_id_liked_from(self, user_id: int) -> list[int]: ...
+
+    @abstractmethod
+    async def get_users_ids_liked_by(self, user_id: int) -> list[int]: ...
+
+    @abstractmethod
+    async def check_match(self, from_user_id: int, to_user_id: int) -> bool: ...

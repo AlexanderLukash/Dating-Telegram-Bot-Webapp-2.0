@@ -380,6 +380,21 @@ django = ["dj-database-url", "dj-email-url", "django-cache-url"]
 tests = ["environs[django]", "pytest"]
 
 [[package]]
+name = "faker"
+version = "30.6.0"
+description = "Faker is a Python package that generates fake data for you."
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "Faker-30.6.0-py3-none-any.whl", hash = "sha256:37b5ab951f7367ea93edb865120e9717a7a649d6a4b223f1e4a47a8a20d9e85f"},
+    {file = "faker-30.6.0.tar.gz", hash = "sha256:be0e548352c1be6f6d9c982003848a0d305868f160bb1fb7f945acffc347e676"},
+]
+
+[package.dependencies]
+python-dateutil = ">=2.4"
+typing-extensions = "*"
+
+[[package]]
 name = "fastapi"
 version = "0.111.1"
 description = "FastAPI framework, high performance, easy to learn, fast to code, ready for production"
@@ -1939,4 +1954,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "c125019f6c269daa09afdf16cfbf16993fc40a06e1e11ffec57ec029759416f1"
+content-hash = "49c4d05b1ad1157fe4e1945e44a52d98fcf0e14b75ae295a360e0d7c817d33cf"

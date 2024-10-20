@@ -34,3 +34,7 @@ class UserDetailSchema(BaseModel):
 
 class GetUsersResponseSchema(BaseQueryResponseSchema):
     items: list[UserDetailSchema]
+
+
+class GetUsersFromResponseSchema(BaseModel):
+    items: list[UserDetailSchema]

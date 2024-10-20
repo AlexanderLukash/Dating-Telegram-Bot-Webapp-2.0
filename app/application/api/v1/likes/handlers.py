@@ -13,9 +13,7 @@ from app.application.api.v1.likes.schemas import (
     CreateLikeResponseSchema,
     DeleteLikeRequestSchema,
     DeleteLikeResponseSchema,
-    GetUsersFromResponseSchema,
 )
-from app.application.api.v1.users.schemas import UserDetailSchema
 from app.domain.exceptions.base import ApplicationException
 from app.logic.init import init_container
 from app.logic.services.base import BaseLikesService
@@ -83,31 +81,3 @@ async def delete_like(
         )
 
     return DeleteLikeResponseSchema.delete_response()
-
-
-@router.get(
-    "/{from_user_id}",
-    status_code=status.HTTP_200_OK,
-    description="Get all users that the user liked.",
-    responses={
-        status.HTTP_200_OK: {"model": GetUsersFromResponseSchema},
-        status.HTTP_400_BAD_REQUEST: {"model": ErrorSchema},
-    },
-)
-async def get_users_from(
-    from_user_id: int,
-    container: Container = Depends(init_container),
-) -> GetUsersFromResponseSchema:
-    service: BaseLikesService = container.resolve(BaseLikesService)
-
-    try:
-        users = await service.get_like_from_user(from_user_id=from_user_id)
-    except ApplicationException as exception:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail={"error": exception.message},
-        )
-
-    return GetUsersFromResponseSchema(
-        items=[UserDetailSchema.from_entity(user) for user in users],
-    )
