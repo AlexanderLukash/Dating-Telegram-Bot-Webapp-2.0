@@ -14,6 +14,7 @@ from app.application.api.v1.likes.schemas import (
     DeleteLikeRequestSchema,
     DeleteLikeResponseSchema,
 )
+from app.bot.utils.notificator import send_liked_message
 from app.domain.exceptions.base import ApplicationException
 from app.logic.init import init_container
 from app.logic.services.base import BaseLikesService
@@ -42,6 +43,10 @@ async def add_like_to_user(
 
     try:
         like = await service.create_like(
+            from_user_id=schema.from_user,
+            to_user_id=schema.to_user,
+        )
+        await send_liked_message(
             from_user_id=schema.from_user,
             to_user_id=schema.to_user,
         )

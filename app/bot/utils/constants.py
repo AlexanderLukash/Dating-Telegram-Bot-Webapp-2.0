@@ -15,7 +15,7 @@ It looks like your account is not active, so please fill it in using the command
     return message
 
 
-def profile_text_message(user: UserEntity) -> str:
+def user_profile_text_message(user: UserEntity) -> str:
     profile_text = (
         f"<b>✨ Your survey:</b> \n\n"
         f"<b>👋 Name:</b> {user.name} | @{user.username}\n"
@@ -26,5 +26,19 @@ def profile_text_message(user: UserEntity) -> str:
 
     if user.about:
         profile_text += f"<b>✍️ About you:</b> \n" f"<i>{user.about}</i>"
+
+    return profile_text
+
+
+def profile_text_message(user: UserEntity) -> str:
+    profile_text = (
+        f"\n<b>👋 Name:</b> {user.name}\n"
+        f"<b>🎀 Age:</b> {user.age}\n"
+        f"<b>🌆 City:</b> {user.city}\n"
+        f"<b>👫 Gender:</b> {user.gender}\n"
+    )
+
+    if user.about:
+        profile_text += f"<b>✍️ About user:</b> \n" f"<i>{user.about}</i>"
 
     return profile_text

@@ -15,7 +15,7 @@ from app.bot.keyboards.reply import (
     remove_keyboard,
     user_name_keyboard,
 )
-from app.bot.utils.constants import profile_text_message
+from app.bot.utils.constants import user_profile_text_message
 from app.bot.utils.states import UserForm
 from app.domain.exceptions.base import ApplicationException
 from app.infra.s3.base import BaseS3Storage
@@ -178,7 +178,7 @@ async def registration_form(
                 text="You are already registered.",
                 reply_markup=remove_keyboard,
             )
-            await message.answer(text=profile_text_message(user=user))
+            await message.answer(text=user_profile_text_message(user=user))
 
         elif not message.from_user.username:
             await message.answer(

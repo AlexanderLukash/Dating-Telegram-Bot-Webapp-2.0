@@ -1,6 +1,5 @@
 from dataclasses import dataclass
 
-from app.bot.utils.notificator import send_liked_message
 from app.domain.entities.likes import LikesEntity
 from app.domain.values.likes import Like
 from app.infra.repositories.base import BaseLikesRepository
@@ -42,11 +41,6 @@ class LikesService(BaseLikesService):
             to_user=to_user,
         )
         await self.like_repository.create_like(new_like)
-        if await self.check_match(
-            from_user_id=from_user_id,
-            to_user_id=to_user_id,
-        ):
-            await send_liked_message(from_user_id, to_user_id)
         return new_like
 
     async def delete_like(self, from_user_id: int, to_user_id: int):

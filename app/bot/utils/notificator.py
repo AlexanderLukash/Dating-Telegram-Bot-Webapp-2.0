@@ -13,7 +13,6 @@ async def send_liked_message(
     to_user_id: int,
     container: Container = init_container(),
 ):
-    # TODO: УБРАТЬ ЦИКЛІЧНІ ІМПОРТИ, БО ТИ ЛОХ НЕ МОЖЕШ НОРМАЛЬНО ПИСАТЬ КОД, ХУЙЛУША
     service: BaseUsersService = container.resolve(BaseUsersService)
 
     try:
@@ -21,7 +20,7 @@ async def send_liked_message(
 
         await bot.send_photo(
             to_user_id,
-            photo="photo",
+            photo=user.photo,
             caption=f"<b>You were liked 💗</b>\n{profile_text_message(user=user)}",
         )
     except Exception as e:
