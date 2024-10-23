@@ -47,7 +47,6 @@ async def add_like_to_user(
             to_user_id=schema.to_user,
         )
         await send_liked_message(
-            from_user_id=schema.from_user,
             to_user_id=schema.to_user,
         )
     except ApplicationException as exception:

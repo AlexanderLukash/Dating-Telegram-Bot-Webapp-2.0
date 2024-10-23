@@ -42,3 +42,15 @@ def profile_text_message(user: UserEntity) -> str:
         profile_text += f"<b>✍️ About user:</b> \n" f"<i>{user.about}</i>"
 
     return profile_text
+
+
+def match_text_message(user: UserEntity) -> str:
+    formatted_text = (
+        f"<b>Super! I hope you have a great time ;) Start chatting 👇</b>\n"
+        f"<b>{user.name}</b> | @{user.username}, {user.age}, {user.city}"
+    )
+
+    if user.about:
+        formatted_text += f"<b>✍️ About user:</b> \n" f"<i>{user.about}</i>"
+
+    return formatted_text

@@ -111,3 +111,41 @@ def about_confirm_keyboard():
         ],
     )
     return keyboard
+
+
+def liked_by_keyboard():
+    keyboard = InlineKeyboardMarkup(
+        inline_keyboard=[
+            [
+                InlineKeyboardButton(
+                    text="Yes ✅",
+                    callback_data="see_who_liked",
+                ),
+                InlineKeyboardButton(
+                    text="No ❎",
+                    callback_data="profile_page",
+                ),
+            ],
+        ],
+    )
+    return keyboard
+
+
+def like_dislike_keyboard(user_id: int):
+    keyboard = InlineKeyboardMarkup(
+        inline_keyboard=[
+            [
+                InlineKeyboardButton(
+                    text="👍",
+                    callback_data=f"like_{user_id}",
+                    one_time=True,
+                ),
+                InlineKeyboardButton(
+                    text="👎",
+                    callback_data=f"dislike_{user_id}",
+                    one_time=True,
+                ),
+            ],
+        ],
+    )
+    return keyboard
