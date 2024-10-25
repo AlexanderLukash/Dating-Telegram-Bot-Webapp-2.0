@@ -93,7 +93,7 @@ async def handle_like_user(
     data = await state.get_data()
     session = data.get("session")
 
-    # Якщо сесія існує, продовжуємо показ наступного користувача
+    # If the session exists, we continue to display the next user
     if session:
         await process_next_user(callback, session)
 
@@ -114,11 +114,11 @@ async def handle_dislike_user(
         to_user_id=callback.from_user.id,
     )
 
-    # Завантажуємо поточну сесію зі стану
+    # We load the current session from the state
     data = await state.get_data()
     session = data.get("session")
 
-    # Продовжуємо обробку з поточною сесією
+    # We continue processing with the current session
     if session:
         await process_next_user(callback, session)
 
@@ -139,7 +139,7 @@ async def handle_see_who_liked(
 
         session = UserSession(liked_users)
 
-        # Зберігаємо сесію в стан користувача
+        # We save the session in the user state
         await state.update_data(session=session)
 
         await process_next_user(callback, session)
