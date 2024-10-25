@@ -1,8 +1,8 @@
- Dating Telegram Bot WebApp 2.0 <img width=32 src="./assets/logo.png">
+ Dating Telegram Bot WebApp 2.0 <img width=32 src="https://github.com/AlexanderLukash/Dating-Telegram-Bot-Webapp/blob/main/assets/logo.png?raw=true">
 
 ![GitHub License](https://img.shields.io/github/license/AlexanderLukash/dating-telegram-bot-webapp)
 ![GitHub watchers](https://img.shields.io/github/watchers/AlexanderLukash/dating-telegram-bot-webapp)
-<img src="./assets/cover.png">
+<img src="https://github.com/AlexanderLukash/Dating-Telegram-Bot-Webapp/blob/main/assets/cover.png?raw=true">
 ![Python](https://img.shields.io/badge/-Python-070404?style=for-the-badge&logo=python)
 ![FastAPI](https://img.shields.io/badge/-Fastapi-070404?style=for-the-badge&logo=fastapi)
 ![Aiogram](https://img.shields.io/badge/-Aiogram-070404?style=for-the-badge&logo=telegram)
