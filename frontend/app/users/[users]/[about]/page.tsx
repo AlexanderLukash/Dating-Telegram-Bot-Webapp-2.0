@@ -14,7 +14,7 @@ import {revalidateTag} from "next/cache";
 
 async function getData(user_id: number) {
 
-    const res = await fetch(`https://4632-194-213-120-6.ngrok-free.app/api/v1/users/${user_id}`, {
+    const res = await fetch(`${BackEnd_URL}/api/v1/users/${user_id}`, {
         method: 'GET',
         headers: {
             'bypass-tunnel-reminder': 'true',
