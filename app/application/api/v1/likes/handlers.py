@@ -13,6 +13,8 @@ from app.application.api.v1.likes.schemas import (
     CreateLikeResponseSchema,
     DeleteLikeRequestSchema,
     DeleteLikeResponseSchema,
+    GetLikeRequestSchema,
+    GetLikeResponseSchema,
 )
 from app.bot.utils.notificator import send_liked_message
 from app.domain.exceptions.base import ApplicationException
@@ -24,6 +26,36 @@ router = APIRouter(
     prefix="/likes",
     tags=["Like"],
 )
+
+
+@router.get(
+    "/{from_user}/{to_user}",
+    status_code=status.HTTP_200_OK,
+    description="Get like.",
+    responses={
+        status.HTTP_200_OK: {"model": GetLikeRequestSchema},
+        status.HTTP_400_BAD_REQUEST: {"model": ErrorSchema},
+    },
+)
+async def get_like(
+    from_user: int,
+    to_user: int,
+    container: Container = Depends(init_container),
+) -> GetLikeResponseSchema:
+    service: BaseLikesService = container.resolve(BaseLikesService)
+
+    try:
+        like = await service.check_like_is_exists(
+            from_user_id=from_user,
+            to_user_id=to_user,
+        )
+    except ApplicationException as exception:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail={"error": exception.message},
+        )
+
+    return GetLikeResponseSchema(status=like)
 
 
 @router.post(

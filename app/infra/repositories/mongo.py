@@ -85,6 +85,36 @@ class MongoDBUserRepository(BaseUsersRepository, BaseMongoDBRepository):
 
         return chats, count
 
+    async def get_best_result_for_user(self, telegram_id: int) -> Iterable[UserEntity]:
+        user = await self.get_user_by_telegram_id(telegram_id)
+        if user is None:
+            return []
+
+        user_age = user.age
+        user_city = user.city
+
+        age_min = int(user_age) - 3
+        age_max = int(user_age) + 3
+
+        users_documents = self._collection.find(
+            filter={
+                "city": user_city,
+                "telegram_id": {"$ne": telegram_id},
+                "$expr": {
+                    "$and": [
+                        {"$gte": [{"$toInt": "$age"}, age_min]},
+                        {"$lte": [{"$toInt": "$age"}, age_max]},
+                    ],
+                },
+            },
+        )
+
+        # Конвертуємо документи у сутності
+        return [
+            convert_user_document_to_entity(user_document=user_document)
+            async for user_document in users_documents
+        ]
+
     async def get_users_liked_from(self, user_list: list[int]) -> Iterable[UserEntity]:
         users_documents = self._collection.find(
             filter={"telegram_id": {"$in": user_list}},

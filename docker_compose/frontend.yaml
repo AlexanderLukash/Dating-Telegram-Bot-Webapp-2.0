@@ -1,0 +1,13 @@
+
+name: dating-front-end
+services:
+  front-app:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+    volumes:
+      - ../frontend:/app
+    env_file:
+      - ../.env
+    ports:
+      - "3000:3000"

@@ -5,6 +5,15 @@ from pydantic import BaseModel
 from app.domain.entities.likes import LikesEntity
 
 
+class GetLikeRequestSchema(BaseModel):
+    from_user: int
+    to_user: int
+
+
+class GetLikeResponseSchema(BaseModel):
+    status: bool
+
+
 class CreateLikeRequestSchema(BaseModel):
     from_user: int
     to_user: int

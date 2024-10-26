@@ -1,0 +1,36 @@
+# Node modules
+node_modules
+npm-debug.log
+yarn-error.log
+yarn-debug.log
+
+# Build output
+.next
+out
+
+# Development files
+*.md
+*.log
+*.test.js
+*.spec.js
+*.ts
+*.tsx
+
+# Local env files
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# VS Code files
+.vscode
+
+# Docker files
+Dockerfile
+docker-compose.yml
+
+# Other
+.DS_Store
+.idea
+*.tgz

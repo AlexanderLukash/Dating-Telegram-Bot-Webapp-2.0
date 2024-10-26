@@ -1,8 +1,17 @@
 from aiogram.types import (
     InlineKeyboardButton,
     InlineKeyboardMarkup,
+    WebAppInfo,
 )
 from aiogram.utils.keyboard import InlineKeyboardBuilder
+from punq import Container
+
+from app.logic.init import init_container
+from app.settings.config import Config
+
+
+container: Container = init_container()
+config: Config = container.resolve(Config)
 
 
 def profile_inline_kb(user_id, liked_by):
@@ -18,7 +27,10 @@ def profile_inline_kb(user_id, liked_by):
         InlineKeyboardButton(text="Edit your profile ⚙️", callback_data="profile_edit"),
     )
     builder.row(
-        InlineKeyboardButton(text="💗 View surveys", callback_data="view"),
+        InlineKeyboardButton(
+            text="💗 View surveys",
+            web_app=WebAppInfo(url=f"{config.front_end_url}/users/{user_id}"),
+        ),
     )
     return builder.as_markup()
 

@@ -1,4 +1,4 @@
-
+name: dating-bot-storage
 services:
   mongodb:
     container_name: chat-mongodb

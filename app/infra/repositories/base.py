@@ -46,6 +46,12 @@ class BaseUsersRepository(ABC):
         user_list: list[int],
     ) -> Iterable[UserEntity]: ...
 
+    @abstractmethod
+    async def get_best_result_for_user(
+        self,
+        telegram_id: int,
+    ) -> Iterable[UserEntity]: ...
+
 
 @dataclass
 class BaseLikesRepository(ABC):

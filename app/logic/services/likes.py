@@ -64,3 +64,9 @@ class LikesService(BaseLikesService):
             user_id=user_id,
         )
         return telegram_ids
+
+    async def check_like_is_exists(self, from_user_id: int, to_user_id: int) -> bool:
+        return await self.like_repository.check_like_is_exists(
+            from_user=from_user_id,
+            to_user=to_user_id,
+        )

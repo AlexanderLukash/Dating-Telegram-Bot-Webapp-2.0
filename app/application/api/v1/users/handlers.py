@@ -86,6 +86,34 @@ async def get_user_handler(
 
 
 @router.get(
+    "/best_result/{user_id}",
+    status_code=status.HTTP_200_OK,
+    description="Get best result for user.",
+    responses={
+        status.HTTP_200_OK: {"model": GetUsersFromResponseSchema},
+        status.HTTP_400_BAD_REQUEST: {"model": ErrorSchema},
+    },
+)
+async def get_users_best_result(
+    user_id: int,
+    container: Container = Depends(init_container),
+) -> GetUsersFromResponseSchema:
+    service_users: BaseUsersService = container.resolve(BaseUsersService)
+
+    try:
+        users = await service_users.get_best_result_for_user(user_id)
+    except ApplicationException as exception:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail={"error": exception.message},
+        )
+
+    return GetUsersFromResponseSchema(
+        items=[UserDetailSchema.from_entity(user) for user in users],
+    )
+
+
+@router.get(
     "/from/{user_id}",
     status_code=status.HTTP_200_OK,
     description="Get all users that the user liked.",

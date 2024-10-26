@@ -35,6 +35,9 @@ class BaseUsersService(ABC):
     async def get_all_users(self, filters: GetAllUsersFilters): ...
 
     @abstractmethod
+    async def get_best_result_for_user(self, telegram_id: int): ...
+
+    @abstractmethod
     async def get_users_liked_from(
         self,
         users_list: list[int],
@@ -51,6 +54,13 @@ class BaseUsersService(ABC):
 class BaseLikesService(ABC):
     @abstractmethod
     async def create_like(self, from_user_id: int, to_user_id: int) -> LikesEntity: ...
+
+    @abstractmethod
+    async def check_like_is_exists(
+        self,
+        from_user_id: int,
+        to_user_id: int,
+    ) -> bool: ...
 
     @abstractmethod
     async def delete_like(self, from_user_id: int, to_user_id: int): ...

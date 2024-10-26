@@ -15,6 +15,7 @@ class UserDetailSchema(BaseModel):
     city: Optional[str]
     looking_for: Optional[str]
     about: Optional[str]
+    photo: Optional[str]
     is_active: bool
 
     @classmethod
@@ -28,6 +29,7 @@ class UserDetailSchema(BaseModel):
             city=user.city,
             looking_for=user.looking_for,
             about=user.about,
+            photo=user.photo,
             is_active=user.is_active,
         )
 

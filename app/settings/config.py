@@ -37,3 +37,5 @@ class Config(BaseSettings):
     @property
     def full_webhook_url(self) -> str:
         return f"{self.url_webhook}/api/v1/webhook"
+
+    front_end_url: str = Field(alias="FRONT_END_URL")
